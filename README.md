@@ -1,7 +1,7 @@
-          * Aimware v5 *
 
-          
-  # LUAscripts for Aimware CS2 #
+
+                                  
+° **LUAscripts for Aimware _CS2_ Cheat** °
 
 
 
