@@ -1,2 +1,2 @@
-# Aimware-v5-lua
-Aimware LUAscripts for CS2
+      # Aimware v5 #
+Aimware forLUAscripts  CS2
