@@ -6,6 +6,8 @@
 local ref = gui.Reference("Visuals", "Skins (Beta)")
 local group = gui.Groupbox(ref, "AutoDisable/-Enable Skins", 16, 400, 325, 80)
 local enable = gui.Checkbox(group, "auto.skins.enable", "", 1)
+gui.Text(group, "Created by ticzz | aka KriZz87")
+gui.Text(group, "https://github.com/ticzz/Aimware-v5-lua")
 
 local function disable_skins()
 	gui.SetValue("esp.skins.enabled", false)
