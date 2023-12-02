@@ -1,2 +1,1 @@
-
-  # Aimware forLUAscripts CS2 #
+  # LUAscripts for Aimware CS2 #
