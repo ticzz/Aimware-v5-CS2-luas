@@ -26,7 +26,7 @@ deadesp_chams_while_spec:SetDescription("Chams used for Wallhack when spectating
 xposi:SetDescription("Sets X Screenposition for the Indicator")
 yposi:SetDescription("Sets Y Screenposition for the Indicator")
 gui.Text(deadesp_group, "Created by ticzz | aka KriZz87")
-gui.Text(deadesp_group, "https://github.com/ticzz/Aimware-v5-luas/blob/master/DeadESP.lua")
+gui.Text(deadesp_group, "https://github.com/ticzz/Aimware-v5-lua")
 
 local color = draw.Color
 local text = draw.TextShadow
