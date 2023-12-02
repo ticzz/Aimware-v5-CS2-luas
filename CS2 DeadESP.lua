@@ -38,32 +38,41 @@ local deadesp_master_value = false
 local deadesp_wallhack_key_value = nil
 local hold_or_toggle_value = nil
 local cache_default_type_of_vis_chams = nil
-
+local indicator_text_color = nil
+callbacks.Register("Draw", "toggle_state", function()
+	if hold_or_toggle_value == 1 then
+		if input.IsButtonPressed(deadesp_wallhack_key:GetValue()) then
+			toggle = not toggle
+		end
+	end
+end)
 callbacks.Register("Draw", "DeadESP", function()
+	draw.SetFont(font)
+
 	player = entities.GetLocalPlayer()
 	deadesp_master_value = deadesp_master:GetValue()
 	deadesp_wallhack_key_value = deadesp_wallhack_key:GetValue()
 	hold_or_toggle_value = hold_or_toggle:GetValue()
 	cache_default_type_of_vis_chams = gui.GetValue("esp.chams.enemy.visible")
 
-	if not player or not deadesp_master_value or not deadesp_wallhack_key_value then
+	indicator_text_color = wh_chams_indicators_clr:GetValue()
+
+	if not player or not deadesp_master_value then
 		return
 	end
 
-	draw.SetFont(font)
-
 	if hold_or_toggle_value == 0 then
 		if
-			player:IsAlive()
-			and deadesp_wallhack_key_value ~= nil
+			player:IsAlive() == true
+			and (deadesp_wallhack_key:GetValue() ~= nil or false)
 			and input.IsButtonDown(deadesp_wallhack_key_value)
 		then
 			gui.SetValue("esp.chams.enemy.occluded", deadesp_chams_on_tggl:GetValue())
-			color(wh_chams_indicators_clr:GetValue())
+			color(indicator_text_color)
 			text(xposi:GetValue(), yposi:GetValue(), "OnHold Chams")
 		elseif
 			player:IsAlive()
-			and deadesp_wallhack_key_value ~= nil
+			and (deadesp_wallhack_key:GetValue() ~= nil or false)
 			and not input.IsButtonDown(deadesp_wallhack_key_value)
 		then
 			gui.SetValue("esp.chams.enemy.occluded", off)
@@ -86,7 +95,7 @@ callbacks.Register("Draw", "DeadESP", function()
 			gui.SetValue("esp.overlay.enemy.armor", false)
 		elseif not player:IsAlive() then
 			gui.SetValue("esp.chams.enemy.occluded", deadesp_chams_while_spec)
-			gui.SetValue("esp.chams.enemy.visible", "2")
+			gui.SetValue("esp.chams.enemy.visible", "1")
 			gui.SetValue("esp.chams.enemyattachments.occluded", off)
 			gui.SetValue("esp.chams.enemyattachments.visible", off)
 			gui.SetValue("esp.chams.friendlyattachments.occluded", off)
@@ -105,15 +114,11 @@ callbacks.Register("Draw", "DeadESP", function()
 			gui.SetValue("esp.overlay.enemy.armor", "1")
 		end
 	elseif hold_or_toggle_value == 1 then
-		if input.IsButtonPressed(deadesp_wallhack_key_value) then
-			toggle = not toggle
-		end
-
-		if player:IsAlive() and deadesp_wallhack_key_value ~= nil and toggle then
+		if player:IsAlive() and (deadesp_wallhack_key:GetValue() ~= nil or false) and toggle then
 			gui.SetValue("esp.chams.enemy.occluded", deadesp_chams_on_tggl:GetValue())
-			color(wh_chams_indicators_clr:GetValue())
+			color(indicator_text_color)
 			text(xposi:GetValue(), yposi:GetValue(), "WH Chams On")
-		elseif player:IsAlive() and deadesp_wallhack_key_value ~= nil and not toggle then
+		elseif player:IsAlive() and (deadesp_wallhack_key:GetValue() ~= nil or false) and not toggle then
 			gui.SetValue("esp.chams.enemy.occluded", off)
 			gui.SetValue("esp.chams.enemy.visible", cache_default_type_of_vis_chams)
 			gui.SetValue("esp.chams.enemyattachments.occluded", off)
@@ -134,7 +139,7 @@ callbacks.Register("Draw", "DeadESP", function()
 			gui.SetValue("esp.overlay.enemy.armor", false)
 		elseif not player:IsAlive() then
 			gui.SetValue("esp.chams.enemy.occluded", deadesp_chams_while_spec)
-			gui.SetValue("esp.chams.enemy.visible", "2")
+			gui.SetValue("esp.chams.enemy.visible", "1")
 			gui.SetValue("esp.chams.enemyattachments.occluded", off)
 			gui.SetValue("esp.chams.enemyattachments.visible", off)
 			gui.SetValue("esp.chams.friendlyattachments.occluded", off)
