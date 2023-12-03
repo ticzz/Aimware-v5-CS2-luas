@@ -1,4 +1,4 @@
---Inspired by zack´s [https://aimware.net/forum/user-36169.html] "always esp on dead.lua" [https://aimware.net/forum/thread/86414]
+--Inspired by zack´s [https://aimware.net/forum/user-36169.html] "always esp on dead.lua"
 --Main usage is for Legit Gameplay
 --Turns Visuals on when dead 		(to get infos for teammates (but attention is recommended because as a legit player you shouldnt know toooo much ;P ))
 --Turns Visuals off when alive 		(exept the Visuals for Chams of visible Enemys will stay on)
