@@ -23,22 +23,19 @@ local function handle_round_announce_match_start(e)
 end
 
 disable_skins()
-
 local function on_event(e)
 	if not enable:GetValue() then
 		return
-	end
-
-	gui.SetValue("esp.skins.enabled", false)
-
-	if e:GetName() == "round_announce_match_start" then
-		handle_round_announce_match_start(e)
-	elseif e:GetName() == "cs_win_panel_match" then
-		handle_cs_win_panel_match(e)
+	else
+		if e:GetName() == "begin_new_match" then
+			handle_round_announce_match_start(e)
+		elseif e:GetName() == "cs_win_panel_match" then
+			handle_cs_win_panel_match(e)
+		end
 	end
 end
 
-client.AllowListener("round_announce_match_start")
+client.AllowListener("begin_new_match")
 client.AllowListener("cs_win_panel_match")
 callbacks.Register("FireGameEvent", on_event)
 
