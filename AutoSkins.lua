@@ -24,10 +24,10 @@ end
 
 disable_skins()
 local function on_event(e)
-	if not enable:GetValue() then
+	if not enable:GetValue() or not entities.GetLocalPlayer() then
 		return
 	else
-		if e:GetName() == "begin_new_match" then
+		if e:GetName() == "round_announce_match_start" then
 			handle_round_announce_match_start(e)
 		elseif e:GetName() == "cs_win_panel_match" then
 			handle_cs_win_panel_match(e)
@@ -35,7 +35,7 @@ local function on_event(e)
 	end
 end
 disable_skins()
-client.AllowListener("begin_new_match")
+client.AllowListener("round_announce_match_start")
 client.AllowListener("cs_win_panel_match")
 callbacks.Register("FireGameEvent", on_event)
 
