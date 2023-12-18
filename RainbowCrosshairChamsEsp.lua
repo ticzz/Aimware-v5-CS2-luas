@@ -60,8 +60,6 @@ local updateColors = function()
 			gui.SetValue("esp.overlay.enemy.box.clr1", r, g, b, 255, true)
 			gui.SetValue("esp.overlay.enemy.health.healthbar.healthclr1", r, g, b, 255, true)
 			gui.SetValue("esp.overlay.enemy.health.healthbar.healthclr2", r, g, b, 255, true)
-			gui.SetValue("esp.other.crosshair.clr", r, g, b, 255, true)
-			gui.SetValue("esp.other.recoilcrosshair.clr", r, g, b, 255, true)
 			gui.SetValue("esp.overlay.enemy.skeleton.clr1", r, g, b, 255, true)
 		end
 	end
