@@ -34,7 +34,7 @@ local function on_event(e)
 		end
 	end
 end
-
+disable_skins()
 client.AllowListener("begin_new_match")
 client.AllowListener("cs_win_panel_match")
 callbacks.Register("FireGameEvent", on_event)
