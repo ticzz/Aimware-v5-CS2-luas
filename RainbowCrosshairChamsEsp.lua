@@ -1,3 +1,5 @@
+-- Rainboweffects for Crosshair, Chams and/or ESP
+
 local ref = gui.Reference("Visuals", "Other", "Effects")
 
 -- Create necessary components
