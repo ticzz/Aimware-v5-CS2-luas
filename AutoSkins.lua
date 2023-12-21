@@ -1,44 +1,54 @@
---[[This Lua script automatically enable or disable skins in CS2.
-	Activated by using the "AutoDisable/-Enable Skins" checkbox, the script will disable skins
-	when a match ends and enable skins again when first round of new match starts.
-	This should fix the crashes of Aimware caused by the Skinchanger on new map load..]]
+--[[This Lua script automatically enables or disables skins in CS2.
+    Activated by using the "autoskins" checkbox, the script will disable skins
+    when a match ends and enable skins again when the first round of a new match starts.
+    This should fix the crashes of Aimware caused by the Skinchanger on new map load. ;P]]
 
 local ref = gui.Reference("Visuals", "Skins (Beta)")
 local group = gui.Groupbox(ref, "AutoDisable/-Enable Skins", 16, 400, 325, 80)
-local enable = gui.Checkbox(group, "auto.skins.enable", "", 1)
+local autoskinsCheckbox = gui.Checkbox(group, "auto.skins.enable", "", true)
 gui.Text(group, "Created by ticzz | aka KriZz87")
 gui.Text(group, "https://github.com/ticzz/Aimware-v5-CS2-luas")
 
-local function disable_skins()
+-- Only register the event listeners once
+local registeredListeners = false
+local function disableSkins()
 	gui.SetValue("esp.skins.enabled", false)
 end
-local function enable_skins()
+
+local function enableSkins()
 	gui.SetValue("esp.skins.enabled", true)
 end
-local function handle_cs_win_panel_match(e)
-	disable_skins()
-end
-local function handle_round_announce_match_start(e)
-	enable_skins()
+
+local function handleMatchStart()
+	disableSkins()
 end
 
-disable_skins()
-local function on_event(e)
-	if not enable:GetValue() or not entities.GetLocalPlayer() then
-		return
-	else
-		if e:GetName() == "round_announce_match_start" then
-			handle_round_announce_match_start(e)
-		elseif e:GetName() == "cs_win_panel_match" then
-			handle_cs_win_panel_match(e)
+local function handleRoundStart()
+	enableSkins()
+end
+
+local function handleGameEvent(event)
+	if not registeredListeners then
+		client.AllowListener("begin_new_match")
+		client.AllowListener("round_announce_match_start")
+		client.AllowListener("cs_win_panel_match")
+		registeredListeners = true
+	end
+
+	local autoskinsEnabled = autoskinsCheckbox:GetValue()
+	if autoskinsEnabled then
+		if event:GetName() == "round_announce_match_start" then
+			handleRoundStart()
+		elseif event:GetName() == "cs_win_panel_match" then
+			handleMatchStart()
 		end
 	end
 end
-disable_skins()
-client.AllowListener("round_announce_match_start")
-client.AllowListener("cs_win_panel_match")
-callbacks.Register("FireGameEvent", on_event)
 
---***********************************************--
+callbacks.Register("FireGameEvent", handleGameEvent)
+
+callbacks.Register("Unload", function()
+	UnloadScript(GetScriptName())
+end)
 
 print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥♥♥♥")
