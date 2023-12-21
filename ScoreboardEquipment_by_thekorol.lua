@@ -1,6 +1,8 @@
---©thekorol
 local console_handlers = {}
 function string:split(sep)
+	if type(self) ~= "string" then
+		return {}
+	end
 	local sep, fields = sep or ":", {}
 	local pattern = string.format("([^%s]+)", sep)
 	self:gsub(pattern, function(c)
@@ -8,6 +10,7 @@ function string:split(sep)
 	end)
 	return fields
 end
+
 local weapon_type_int = {
 	1,
 	1,
@@ -118,6 +121,9 @@ local wep_type = {
 }
 local function getWeaponType(wepIdx)
 	local typeInt = weapon_type_int[tonumber(wepIdx)]
+	if not typeInt then
+		return nil
+	end
 	for index, value in pairs(wep_type) do
 		if value == typeInt then
 			return index ~= 0 and index or (tonumber(wepIdx) == 31 and "taser" or "knife")
@@ -126,12 +132,13 @@ local function getWeaponType(wepIdx)
 end
 
 local function register_console_handler(command, handler, force)
-	if console_handlers[command] and not force then
+	if not command or not handler or type(handler) ~= "function" or (console_handlers[command] and not force) then	//	if console_handlers[command] and not force then
 		return false
 	end
 	console_handlers[command] = handler
 	return true
 end
+
 -- Console input
 callbacks.Register("SendStringCmd", "lib_console_input", function(c)
 	local raw_console_input = c:Get() -- Maximum 255 chars
@@ -403,19 +410,21 @@ Client.register_handler(function(msg)
 		return true
 	end
 end)
-local enhancement = gui.Reference("Misc", "Enhancement", "Appearance")
-local hudweapon_enable = gui.Checkbox(enhancement, "hudweapon.enabled", "Display equipment on scoreboard", false)
-local menu = { filter = gui.Multibox(enhancement, "Weapon filter") }
+local rb_ref = gui.Reference("Visuals")
+local tab = gui.Tab(rb_ref, "hudweapon", "Scoreboard Add-ons")
+local hudweapon_enable = gui.Checkbox(tab, "hudweapon.enabled", "Display Weapon -> Scoreboard", false)
+local menu = { filter = gui.Multibox(tab, "Weapon filter") }
 local itemList = { "Primary", "Secondary", "Knife/Taser", "Grenades", "C4", "Defuser", "Armor", "Other" }
 for index, value in ipairs(itemList) do
 	menu["item_" .. index] = gui.Checkbox(menu.filter, "hudweapon.item_" .. index, value, false)
 end
-local hudweapon_color = gui.ColorPicker(enhancement, "hudweapon.color", "Blur color", 136, 71, 255, 255)
+local hudweapon_color = gui.ColorPicker(tab, "hudweapon.color", "Blur color of WeaponIcons outlines", 136, 71, 255, 255)
+
 local player_weapons = {}
 for i = 0, 64 do
 	player_weapons[i] = {}
 end
-gui.Button(enhancement, "Clear equipments data", function()
+gui.Button(tab, "Clear equipments data", function()
 	for i = 0, 64 do
 		player_weapons[i] = {}
 	end
@@ -437,7 +446,7 @@ local function filter_weapon(wepList)
 			if not menu.item_2:GetValue() then
 				table.remove(wepList, index)
 			end
-		elseif wepType == "taser" then
+		elseif wepType == "taser" or "knife" then
 			if not menu.item_3:GetValue() then
 				table.remove(wepList, index)
 			end
@@ -582,6 +591,9 @@ callbacks.Register("Draw", "hud_weapon_render", function()
 end)
 
 callbacks.Register("FireGameEvent", "hud_weapon_events", function(event)
+	if not entities.GetLocalPlayer() then
+		return
+	end
 	local eventName = event:GetName()
 	if eventName then
 		if eventName == "item_equip" then
@@ -610,7 +622,7 @@ callbacks.Register("FireGameEvent", "hud_weapon_events", function(event)
 		end
 	end
 end)
---©thekorol
+
 client.AllowListener("item_equip")
 client.AllowListener("item_pickup")
 client.AllowListener("item_remove")
@@ -622,3 +634,8 @@ client.AllowListener("start_halftime")
 client.AllowListener("game_newmap")
 client.AllowListener("round_end")
 client.AllowListener("bomb_dropped")
+
+
+--***********************************************--
+
+print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
