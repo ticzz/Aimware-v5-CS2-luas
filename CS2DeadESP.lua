@@ -4,140 +4,213 @@
 -- Disable most extras for alive players to hide cheats
 -- Allow briefly enabling extras while alive via a toggle hotkey
 
--- Menu creation
-local x, y = draw.GetScreenSize()
-local vis_ref = gui.Reference("VISUALS")
-local esp_tab = gui.Tab(vis_ref, "deadesp.tab", "DeadESP")
-local espGroup = gui.Groupbox(esp_tab, "DeadESP", 10, 10, 300, 0)
+-- Config table
+local config = {
+	enabled = false,
+	keyMode = "Hold",
+	holdKey = 0,
+	chams = "Off",
+	indicatorColor = { 255, 255, 255, 255 },
+	indicatorPos = { x = 100, y = 100 },
+}
 
--- Configurable options
-local enableMaster = gui.Checkbox(espGroup, "enablemaster", "Enable DeadESP", false)
-local keyMode = gui.Combobox(espGroup, "espkeymode", "keyMode", "Hold", "Toggle")
-local holdKey = gui.Keybox(espGroup, "espkey", "ESP Key", 0)
-local chamsOptions = gui.Combobox(espGroup, "chamsOptions", "Type of Chams", "Off", "Flat")
-local indicators_clr = gui.ColorPicker(espGroup, "indicator.color", "WH Indicator Color", 0, 0, 0, 255)
-local xposi = gui.Slider(espGroup, "deadesp_xposi", "X Position", 15, 0, x)
-local yposi = gui.Slider(espGroup, "deadesp_yposi", "Y Position", y / 2, 0, y)
-
--- Option Tips
-gui.Text(espGroup, "Created by ticzz | aka KriZz87")
-gui.Text(espGroup, "https://github.com/ticzz/Aimware-v5-CS2-luas")
-holdKey:SetDescription("Key to turn on Chams thru Wallz while alive")
-chamsOptions:SetDescription("Chams used for onKey Wallhack and while dead")
-xposi:SetDescription("Sets position X  for the Indicator")
-yposi:SetDescription("Sets position Y for the Indicator")
-local color = draw.Color
-local text = draw.TextShadow
+-- Constants
 local font = draw.CreateFont("Arial", 12, 100)
+local screenSizeX, screenSizeY = draw.GetScreenSize()
 
--- Internal state
-local isAlive = false
-local toggle = false
+-- Menu references
+local menuTab, menuGroup
+local guiElements = {}
 
--- Enable extra ESP visuals when dead
-local function EnableExtraESP()
- -- Force enable enemy chams behind walls
- gui.SetValue("esp.chams.enemy.occluded", 1)
- -- Enable other extras
- gui.SetValue("esp.chams.enemy.visible", 0)
- gui.SetValue("esp.chams.enemyattachments.occluded", 0)
- gui.SetValue("esp.chams.enemyattachments.visible", 0)
- gui.SetValue("esp.chams.friendlyattachments.occluded", 0)
- gui.SetValue("esp.chams.friendlyattachments.visible", 0)
- gui.SetValue("esp.overlay.enemy.box", false)
- gui.SetValue("esp.overlay.enemy.flags.hasdefuser", true)
- gui.SetValue("esp.overlay.enemy.flags.hasc4", true)
- gui.SetValue("esp.overlay.enemy.flags.reloading", false)
- gui.SetValue("esp.overlay.enemy.flags.scoped", false)
- gui.SetValue("esp.overlay.enemy.health.healthnum", true)
- gui.SetValue("esp.overlay.enemy.health.healthbar", true)
- gui.SetValue("esp.overlay.enemy.name", true)
- gui.SetValue("esp.overlay.enemy.weapon", true)
- gui.SetValue("esp.overlay.weapon.ammo", true)
- gui.SetValue("esp.overlay.enemy.barrel", false)
- gui.SetValue("esp.overlay.enemy.armor", true)
+-- Create menu
+local function createMenu()
+	-- Validate menu doesn't exist already
+	if menuTab then
+		return
+	end
+	-- Menu tab
+	menuTab = gui.Tab(gui.Reference("VISUALS"), "deadesp.tab", "DeadESP")
+
+	-- Menu group
+	menuGroup = gui.Groupbox(menuTab, "DeadESP", 10, 10, 300, 0)
+
+	-- Config elements
+	guiElements.enabled = gui.Checkbox(menuGroup, "enabled", "Enable DeadESP", config.enabled)
+	guiElements.keyMode = gui.Combobox(menuGroup, "keymode", "Key Mode", "Hold", "Toggle")
+	guiElements.holdKey = gui.Keybox(menuGroup, "holdkey", "ESP Key", config.holdKey)
+	guiElements.chams = gui.Combobox(menuGroup, "chams", "Chams Type", "Off", "Flat", config.chams)
+	guiElements.indicatorColor =
+		gui.ColorPicker(menuGroup, "indicatorColor", "Indicator Color", unpack(config.indicatorColor))
+	guiElements.indicatorPosX =
+		gui.Slider(menuGroup, "indicatorPosX", "Indicator X", config.indicatorPos.x, 0, screenSizeX)
+	guiElements.indicatorPosY =
+		gui.Slider(menuGroup, "indicatorPosY", "Indicator Y", config.indicatorPos.y, 0, screenSizeY)
 end
 
--- Disable most extras when alive
-local function DisableExtraESP()
- -- Restore visible chams only
- gui.SetValue("esp.chams.enemy.visible", chamsOptions:GetValue())
- -- Disable other extras
- gui.SetValue("esp.chams.enemy.occluded", 0)
- gui.SetValue("esp.chams.enemyattachments.occluded", 0)
- gui.SetValue("esp.chams.enemyattachments.visible", 0)
- gui.SetValue("esp.chams.friendlyattachments.occluded", 0)
- gui.SetValue("esp.chams.friendlyattachments.visible", 0)
- gui.SetValue("esp.overlay.enemy.box", false)
- gui.SetValue("esp.overlay.enemy.flags.hasdefuser", false)
- gui.SetValue("esp.overlay.enemy.flags.hasc4", false)
- gui.SetValue("esp.overlay.enemy.flags.reloading", false)
- gui.SetValue("esp.overlay.enemy.flags.scoped", false)
- gui.SetValue("esp.overlay.enemy.health.healthnum", false)
- gui.SetValue("esp.overlay.enemy.health.healthbar", false)
- gui.SetValue("esp.overlay.enemy.name", false)
- gui.SetValue("esp.overlay.enemy.weapon", false)
- gui.SetValue("esp.overlay.weapon.ammo", false)
- gui.SetValue("esp.overlay.enemy.barrel", false)
- gui.SetValue("esp.overlay.enemy.armor", false)
+-- Update config from menu
+local function updateConfig()
+	-- Add print to debug
+	print("Config at start of updateConfig:", config)
+	config.enabled = guiElements.enabled:GetValue()
+	config.keyMode = guiElements.keyMode:GetValue()
+	config.holdKey = guiElements.holdKey:GetValue()
+	config.chams = guiElements.chams:GetValue()
+	config.indicatorColor = guiElements.indicatorColor:GetValue()
+	config.indicatorPos.x = guiElements.indicatorPosX:GetValue()
+	config.indicatorPos.y = guiElements.indicatorPosY:GetValue()
+	-- Print again
+	print("Config at end of updateConfig:", config)
 end
 
--- Enable OnHold extra ESP visuals by onHold-/Togglekey
+-- Draw indicator text
+local function drawIndicator(text)
+	if config.enabled then
+		draw.SetFont(font)
+		draw.Color(config.indicatorColor)
+		draw.TextShadow(config.indicatorPos.x, config.indicatorPos.y, text)
+	end
+end
+
+-- Disable extra ESP when alive
+local function disableExtraESP()
+	-- Only enable visible chams
+	gui.SetValue("esp.chams.enemy.visible", config.chams:GetValue())
+
+	-- Disable other extras
+	gui.SetValue("esp.chams.enemy.occluded", 0)
+	gui.SetValue("esp.overlay.enemy.box", false)
+	gui.SetValue("esp.overlay.enemy.flags.hasdefuser", false)
+	gui.SetValue("esp.overlay.enemy.flags.hasc4", false)
+	gui.SetValue("esp.overlay.enemy.flags.reloading", false)
+	gui.SetValue("esp.overlay.enemy.flags.scoped", false)
+	gui.SetValue("esp.overlay.enemy.health.healthnum", false)
+	gui.SetValue("esp.overlay.enemy.health.healthbar", false)
+	gui.SetValue("esp.overlay.enemy.name", false)
+	gui.SetValue("esp.overlay.enemy.weapon", false)
+	gui.SetValue("esp.overlay.weapon.ammo", false)
+	gui.SetValue("esp.overlay.enemy.barrel", false)
+	gui.SetValue("esp.overlay.enemy.armor", false)
+end
+
+-- Enable extra ESP features when dead
+local function enableExtraESP()
+	-- Force enable enemy chams
+	gui.SetValue("esp.chams.enemy.occluded", 1)
+
+	-- Enable other ESP options
+	gui.SetValue("esp.chams.enemy.visible", config.chams:GetValue())
+	gui.SetValue("esp.overlay.enemy.box", false)
+	gui.SetValue("esp.overlay.enemy.flags.hasdefuser", true)
+	gui.SetValue("esp.overlay.enemy.flags.hasc4", true)
+	gui.SetValue("esp.overlay.enemy.flags.reloading", false)
+	gui.SetValue("esp.overlay.enemy.flags.scoped", false)
+	gui.SetValue("esp.overlay.enemy.health.healthnum", true)
+	gui.SetValue("esp.overlay.enemy.health.healthbar", true)
+	gui.SetValue("esp.overlay.enemy.name", true)
+	gui.SetValue("esp.overlay.enemy.weapon", true)
+	gui.SetValue("esp.overlay.weapon.ammo", true)
+	gui.SetValue("esp.overlay.enemy.barrel", false)
+	gui.SetValue("esp.overlay.enemy.armor", true)
+end
+
 local function OnHoldExtraESP()
- gui.SetValue("esp.chams.enemy.occluded", 1)
+	gui.SetValue("esp.chams.enemy.occluded", 1)
 end
+
+-- Internal State
+local isESPActive = false
+local wasPlayerAlive = true
+local isToggled = false
 
 -- Main logic
-local function UpdateESPForState()
- draw.SetFont(font)
+local function onDraw()
+	-- Wrap everything in pcall
+	local status, err = pcall(function()
+		-- Get player state
+		-- Validate
+		if not entities.GetLocalPlayer() then
+			return
+		end
 
- -- Exit if not enabled
- local lp = entities.GetLocalPlayer()
- if not lp or not enableMaster:GetValue() then
- return
- end
+		if not config.enabled then
+			return
+		end
 
- -- Set ESP based on alive/dead state
- if isAlive then
- -- Alive logic - reduce ESP
- DisableExtraESP()
+		-- Update config from menu
+		updateConfig()
 
- -- Allow brief ESP on hold key
- if holdKey:GetValue() ~= 0 and keyMode:GetValue() == 0 then
- if input.IsButtonDown(holdKey:GetValue()) then
- OnHoldExtraESP()
- color(indicators_clr:GetValue())
- text(xposi:GetValue(), yposi:GetValue(), "OnHold Chams")
- end
- elseif holdKey:GetValue() ~= 0 and keyMode:GetValue() == 1 then
- if input.IsButtonPressed(holdKey:GetValue()) then
- toggle = not toggle
- end
- if toggle then
- OnHoldExtraESP()
- color(indicators_clr:GetValue())
- text(xposi:GetValue(), yposi:GetValue(), "WH Chams On")
- else
- DisableExtraESP()
- end
- end
- else
- -- Dead logic - enable extras
- EnableExtraESP()
- end
+		-- Update ESP based on state
+		if isAlive ~= wasPlayerAlive then
+			wasPlayerAlive = isAlive
+			isESPActive = false
+		end
+
+		if not isAlive then
+			-- Dead logic
+			enableExtraESP()
+		else
+			-- Alive logic
+			disableExtraESP()
+			isESPActive = false
+			-- Allow brief ESP on hold key
+			local keyMode = config.keyMode:GetValue()
+			local holdKey = config.holdKey:GetValue()
+			local holdKeyDown = input.IsButtonDown(holdKey)
+			local holdKeyToggled = input.IsButtonPressed(holdKey)
+			if keyMode == 0 and holdKeyDown then
+				-- Hold mode
+				OnHoldExtraESP()
+				isESPActive = true
+				if isESPActive then
+					drawIndicator("OnHold")
+				end
+			elseif keyMode == 1 and holdKeyToggled then
+				-- Toggle mode
+				isToggled = not isToggled
+				if isToggled then
+					OnHoldExtraESP()
+					isESPActive = true
+				else
+					disableExtraESP()
+				end
+			end
+		end
+		-- Draw indicator if active
+		if isESPActive then
+			drawIndicator(keyMode == 1 and "Enabled" or "OnHold")
+		end
+	end)
+
+	-- Handle errors
+	if not status then
+		logFile = file.Open("error.txt", "a")
+		logFile:Write(err .. "\n")
+		logFile:Close()
+		return
+	end
 end
 
--- Main loop
-local function OnDraw()
- -- Get current player state
- isAlive = entities.GetLocalPlayer():IsAlive()
+-- Initialize
+createMenu()
 
- -- Update ESP based on state
- UpdateESPForState()
-end
+-- Register callback
+callbacks.Register("Draw", onDraw)
 
--- Register callbacks
-callbacks.Register("Draw", OnDraw)
+-- Cleanup on unload
+callbacks.Register("Unload", function()
+	-- Close log file
+	if logFile then
+		logFile:Close()
+	end
+	-- Clean up menu tabs
+	if menuTab then
+		menuTab:Remove()
+	end
+	-- Clean up menu references
+	if menuGroup then
+		menuGroup:Remove()
+	end
+end)
 
 --***********************************************--
 print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
