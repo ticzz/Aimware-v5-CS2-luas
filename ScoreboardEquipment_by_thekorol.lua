@@ -2,7 +2,7 @@
 -- Original Thread			    	--> https://aimware.net/forum/thread/152643
 -- Original RAWlink to Lua			--> https://raw.githubusercontent.com/thekorol/Aimware-luas/master/ScoreboardEquipment.lua
 
--- Just made small changes to this, i just added 3 nil-checks and extended a check in line 140 to prevent error spam in console while you have no weapon equiped or you are dead
+-- Just made small changes to this. I added 3 nil-checks and extended a check in line 140 to prevent error spam in console, while no weapon equiped or when the player_ent returns nil like in warmup round.
 
 local console_handlers = {}
 function string:split(sep)
