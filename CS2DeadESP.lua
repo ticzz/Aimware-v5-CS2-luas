@@ -59,24 +59,19 @@ local function createMenu()
 	guiElements.indicatorPosY =
 		gui.Slider(menuGroup, "indicatorPosY", "Indicator Y", config.indicatorPos.y, 0, screenSizeY)
 
-	espoptionstoUse = {
-		enemy_chams_visible = gui.Checkbox(
-			guiElements.espoptionstoUse,
-			"enemy_chams_visible",
-			"EnemyChams visible",
-			false
-		),
-		enemy_box = gui.Checkbox(guiElements.espoptionstoUse, "enemy_box", "Box", false),
-		enemy_name = gui.Checkbox(guiElements.espoptionstoUse, "enemy_name", "Name", false),
-		enemy_healthbar = gui.Checkbox(guiElements.espoptionstoUse, "enemy_healthbar", "Healthbar", false),
-		enemy_healthnum = gui.Checkbox(guiElements.espoptionstoUse, "enemy_healthnum", "Healthnumber", false),
-		enemy_weapon = gui.Checkbox(guiElements.espoptionstoUse, "enemy_weapon", "Weapon", false),
-		enemy_ammo = gui.Checkbox(guiElements.espoptionstoUse, "enemy_ammo", "Ammo", false),
-		enemy_hasc4 = gui.Checkbox(guiElements.espoptionstoUse, "enemy_hasc4", "HasC4", false),
-		enemy_hasdefuser = gui.Checkbox(guiElements.espoptionstoUse, "enemy_hasdefuser", "HasDefuser", false),
-		enemy_reload = gui.Checkbox(guiElements.espoptionstoUse, "enemy_reload", "Reloading", false),
-		enemy_scoped = gui.Checkbox(guiElements.espoptionstoUse, "enemy_scoped", "Scoped", false),
-		enemy_armor = gui.Checkbox(guiElements.espoptionstoUse, "enemy_armor", "Armor", false),
+	guiElements = {
+		enemy_chams = gui.Checkbox(menuGroup, "enemy_chams", "EnemyChams visible", false),
+		enemy_box = gui.Checkbox(menuGroup, "enemy_box", "Box", false),
+		enemy_name = gui.Checkbox(menuGroup, "enemy_name", "Name", false),
+		enemy_healthbar = gui.Checkbox(menuGroup, "enemy_healthbar", "Healthbar", false),
+		enemy_healthnum = gui.Checkbox(menuGroup, "enemy_healthnum", "Healthnumber", false),
+		enemy_weapon = gui.Checkbox(menuGroup, "enemy_weapon", "Weapon", false),
+		enemy_ammo = gui.Checkbox(menuGroup, "enemy_ammo", "Ammo", false),
+		enemy_hasc4 = gui.Checkbox(menuGroup, "enemy_hasc4", "HasC4", false),
+		enemy_hasdefuser = gui.Checkbox(menuGroup, "enemy_hasdefuser", "HasDefuser", false),
+		enemy_reload = gui.Checkbox(menuGroup, "enemy_reload", "Reloading", false),
+		enemy_scoped = gui.Checkbox(menuGroup, "enemy_scoped", "Scoped", false),
+		enemy_armor = gui.Checkbox(menuGroup, "enemy_armor", "Armor", false),
 	}
 end
 
