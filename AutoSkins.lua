@@ -3,7 +3,7 @@ local autoskinsCheckbox = gui.Checkbox(group, "auto.skins.enable", "", true)
 gui.Text(group, "Created by ticzz | aka KriZz87")
 gui.Text(group, "https://github.com/ticzz/Aimware-v5-CS2-luas")
 local localPlayer = entities.GetLocalPlayer()
-local mapname = engine.GetMapName()
+local mapname = engine.GetServerIp() -- MapName()
 local maploadfinished = mapname and localPlayer:isAlive()
 
 local function nomaploaded()
