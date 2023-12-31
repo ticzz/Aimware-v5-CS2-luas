@@ -1,3 +1,4 @@
+--[[
 -- Original Scoreboard Equipment by thekorol 	--> https://aimware.net/forum/user/174137
 -- Original Thread in Forum of Aimware		--> https://aimware.net/forum/thread/152643
 -- Original RAWlink to Lua			--> https://raw.githubusercontent.com/thekorol/Aimware-luas/master/ScoreboardEquipment.lua
@@ -645,3 +646,4 @@ client.AllowListener("bomb_dropped")
 --***********************************************--
 
 print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
+--]] 
