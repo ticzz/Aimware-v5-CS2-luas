@@ -5,6 +5,7 @@ script_browser:SetHeight(385)
 local search_box = gui.Editbox(gui.Reference("Settings", "Lua Scripts", "Browse"), "search", "Search scripts")
 search_box:SetPosY(-10)
 search_box:SetWidth(280)
+
 -- Cache filtered list
 local filtered_scripts = {}
 
@@ -12,17 +13,17 @@ local filtered_scripts = {}
 local files = { lua = {}, folder = {} }
 
 local function GetScripts(path)
-    local ok, err = pcall(function()
-        if path:match(".*%.lua$") then
-            table.insert(files.lua, path)
-        elseif path:match("/.*/$ .. /.*%.lua$") then
-            table.insert(files.folder, path)
-        end
-    end)
+	local ok, err = pcall(function()
+		if path:match(".*%.lua$") then
+			table.insert(files.lua, path)
+		elseif path:match("/.*/$ .. /.*%.lua$") then
+			table.insert(files.folder, path)
+		end
+	end)
 
-    if not ok then
-        print("Error getting scripts: " .. err)
-    end
+	if not ok then
+		print("Error getting scripts: " .. err)
+	end
 end
 
 -- Cache lowercase script names
@@ -49,8 +50,6 @@ local function Refresh()
 	end
 end
 
-
-
 local function FilterScripts()
 	filtered_scripts = {}
 
@@ -67,20 +66,21 @@ local function FilterScripts()
 
 	-- Keep folders
 	for _, folder in ipairs(files.folder) do
-		if lowercase_scriptsandfolder[i]:find(search_text) then
-		table.insert(filtered_scripts, folder)
+		if lowercase_scriptsandfolder[_]:find(search_text) then
+			table.insert(filtered_scripts, folder)
+		end
 	end
 end
 
 local function UpdateScriptBrowser()
+	Refresh()
+	FilterScripts()
 	script_browser:SetOptions(unpack(filtered_scripts))
 end
 
-local function applysearch()
-	Refresh()
-	FilterScripts()
-	UpdateScriptBrowser()
-end
+-- Use custom callback (assuming gui.Custom exists and works as intended)
+local Apply_search =
+	gui.Custom(gui.Reference("Settings", "Lua Scripts"), "lua.search", 0, 0, 0, 0, UpdateScriptBrowser(), nil, nil)
 
 local ui_refresh_lua = gui.Button(gui.Reference("Settings", "Lua Scripts", "Other"), "Refresh List", Refresh)
 ui_refresh_lua:SetPosY(42)
@@ -88,14 +88,7 @@ ui_refresh_lua:SetWidth(123)
 ui_refresh_lua:SetPosX(0)
 ui_refresh_lua:SetHeight(28)
 
-
--- Use custom callback (assuming gui.Custom exists and works as intended)
-local Apply_search =
-	gui.Custom(gui.Reference("Settings", "Lua Scripts"), "lua.search", 0, 0, 0, 0, applysearch(), nil, nil)
-
 -- Other UI setup
-
-Refresh()
 
 -- Error handling
 callbacks.Register("Unload", function()
