@@ -14,9 +14,9 @@ local files = { lua = {}, folder = {} }
 
 local function GetScripts(path)
 	local ok, err = pcall(function()
-		if path:match(".*%.lua$") then
+		if path:gmatch(".*%.lua$") then
 			table.insert(files.lua, path)
-		elseif path:match("/.*/$ .. /.*%.lua$") then
+		elseif path:gmatch(".*/%...*%.lua$") then
 			table.insert(files.folder, path)
 		end
 	end)
@@ -65,8 +65,8 @@ local function FilterScripts()
 	end
 
 	-- Keep folders
-	for _, folder in ipairs(files.folder) do
-		if lowercase_scriptsandfolder[_]:find(search_text) then
+	for i, folder in ipairs(files.folder) do
+		if lowercase_scriptsandfolder[i]:find(search_text) then
 			table.insert(filtered_scripts, folder)
 		end
 	end
