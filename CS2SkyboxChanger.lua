@@ -13,7 +13,9 @@
 ]]
 --
 
-local skyref = gui.Reference("Visuals", "World", "Materials", "Skybox")
+local skyref = gui.Reference("Visuals", "World", "Camera")
+
+local listbox = gui.Combobox(skyref, "skybox_list", "Skybox", options)
 
 local skyboxes = {
 	"Default",
@@ -65,23 +67,21 @@ local skyboxesMenu = {
 	"Decent2",
 }
 
-skyref:SetOptions(unpack(skyboxesMenu))
+options = listbox:SetOptions(unpack(skyboxesMenu))
 local set = client.Command -- client.SetConVar
-local last = skyref:GetValue()
+local last = listbox:GetValue()
 
 local function SkyBox()
-	if last ~= skyref:GetValue() then
-		set("sv_skyname " .. skyboxes[skyref:GetValue() + 1], true)
-		last = skyref:GetValue()
+	if last ~= listbox:GetValue() then
+		set("sv_skyname " .. skyboxes[listbox:GetValue() + 1], true)
+		last = listbox:GetValue()
 	end
 end
 callbacks.Register("Draw", SkyBox)
 
 callbacks.Register("Unload", "Skybox", function()
-	skyref:SetOptions("Default")
-	gui.SetValue("esp.world.materials.skybox", Default, true)
+	listbox:SetOptions("Default")
 end)
 
 --***********************************************--
-
 print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
