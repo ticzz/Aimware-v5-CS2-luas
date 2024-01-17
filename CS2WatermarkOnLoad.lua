@@ -1,0 +1,11 @@
+local USER_NAME = cheat.GetUserName()
+local LOCAL_WATERMARK = draw.CreateFont("Verdana", 15, 1200)
+local SIZE_X, SIZE_Y = draw.GetScreenSize()
+local function watermark()
+	draw.SetFont(LOCAL_WATERMARK)
+	draw.Color(250, 55, 55, 255)
+	draw.FilledRect(SIZE_X - 190, 10, SIZE_X - 35, 30)
+	draw.Color(255, 255, 255, 255)
+	draw.Text(SIZE_X - 180, 15, "Welcome back " .. USER_NAME .. "!")
+end
+callbacks.Register("Draw", watermark)
