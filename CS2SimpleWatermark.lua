@@ -30,7 +30,7 @@ local function draw_logo()
 		draw.Color(0, 150, 0, 255)
 	end
 
-	draw.Text(143, 15, get_abs_fps())
+	draw.Text(143, 15, tostring(get_abs_fps()))
 	draw.Text(165, 15, "  fps")
 end
 
