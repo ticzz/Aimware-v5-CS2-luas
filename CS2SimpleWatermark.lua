@@ -1,3 +1,7 @@
+local font = draw.CreateFont("Tahoma", 14)
+local ref = gui.Reference("Misc", "Enhancement", "Appearance")
+local watermarktextColor = gui.ColorPicker(ref, "watermark_color", "Watermark Color", 204, 96, 112, 255)
+local size_x, size_y = draw.GetScreenSize()
 local cheatname = "aimware.net Beta"
 local user_name = cheat.GetUserName()
 local seperator = " | "
@@ -15,11 +19,12 @@ end
 local watermarktext = cheatname .. seperator .. user_name
 
 local function draw_logo()
+	draw.SetFont(font)
 	draw.Color(110, 110, 110, 255)
 	draw.FilledRect(5, 5, 245, 35)
 	draw.Color(255, 255, 255, 255)
 	draw.FilledRect(10, 10, 240, 30)
-	draw.Color(0, 0, 0, 255)
+	draw.Color(watermarktextColor:GetValue())
 	draw.Text(15, 15, watermarktext)
 
 	local fps = get_abs_fps()
