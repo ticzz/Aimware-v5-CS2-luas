@@ -48,6 +48,7 @@ callbacks.Register("Unload", function()
 	ui_lua:SetHeight(432)
 end)
 
+
 --***********************************************--
 -- Info about success or failure of loading the script
 --***********************************************--
