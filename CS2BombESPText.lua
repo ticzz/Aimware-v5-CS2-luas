@@ -1,25 +1,23 @@
-local ref = gui.Reference("Visuals", "Local", "Camera")
+local ref = gui.Reference("Visuals", "Overlay", "Enemy")
 local chk = gui.Checkbox(ref, "enablebombesptext", "BoooooooombESP", false)
-local function DrawESP(builder)
+local function OnDrawESP(builder)
 	if not entities.GetLocalPlayer() or not chk then
 		return
 	end
-
 	local players = entities.FindByClass("C_CSPlayerPawn")
-
-	for i, player in ipairs(players) do
+	local ent = builder:GetEntity()
+	for i = 1, #players do
+		local player = players[i]
 		print(player)
 	end
-
-	local c4bomb = builder:GetEntity():GetPropEntity("m_iPlayerC4")
-
-	if c4bomb then
-		builder:Color(255, 0, 0, 255)
+	local c4bomb = ent:GetPropEntity("m_iPlayerC4")
+	if not c4bomb then
+		return
 	else
-		builder:Color(0, 255, 0, 255)
+		builder:Color(255, 0, 0, 255)
+		builder:AddTextBottom("BOMBer")	
 	end
-
-	builder:AddTextBottom("BOMB")
 end
-
-callbacks.Register("DrawESP", DrawESP)
+callbacks.Register("DrawESP", OnDrawESP)
+--***********************************************--
+print("" .. GetScriptName() .. " loaded without Errors")
