@@ -1,13 +1,15 @@
---Inspired by zack´s [https://aimware.net/forum/user-36169.html] "always esp on dead.lua"
+--[[Inspired by zack┬┤s [https://aimware.net/forum/user-36169.html] "always esp on dead.lua"
 -- Main usage is for Legit Gameplay
 -- Enable extra ESP visuals for dead players to help teammates
 -- Disable most extras for alive players to hide cheats
 -- Allow briefly enabling extras while alive via a toggle hotkey
 
+]]
+
 -- Config table
 local config = {
 	enabled = false,
-	keyMode = "Hold",
+	keyMode = 0,
 	holdKey = 0,
 	chams = "Off",
 	indicatorColor = { 255, 255, 255, 255 },
@@ -47,7 +49,7 @@ local function createMenu()
 
 	-- Config elements
 	guiElements.enabled = gui.Checkbox(menuGroup, "enabled", "Enable DeadESP", config.enabled)
-	guiElements.keyMode = gui.Combobox(menuGroup, "keymode", "Key Mode", "Hold", "Toggle")
+	guiElements.keyMode = gui.Combobox(menuGroup, "keymode", "Key Mode", "Hold", "Toggle", config.keyMode)
 	guiElements.holdKey = gui.Keybox(menuGroup, "holdkey", "ESP Key", config.holdKey)
 	guiElements.chams = gui.Combobox(menuGroup, "chams", "Chams Type", "Off", "Flat", config.chams)
 	guiElements.espoptionstoUse =
@@ -80,7 +82,7 @@ createMenu()
 -- Update config from menu
 local function updateConfig()
 	-- Add print to debug
-	print("Config at start of updateConfig:", config)
+	--print("Config at start of updateConfig:", config)
 	if guiElements.enabled:GetValue() ~= config.enabled then
 		config.enabled = guiElements.enabled:GetValue()
 	end
@@ -104,19 +106,19 @@ local function updateConfig()
 	end
 	if guiElements.espoptionstoUse:GetValue() ~= config.variablestoUse then
 		config.variablestoUse = {}
-		for i, option in ipairs(espoptionstoUse) do
+		for i, option in ipairs(guiElements.espoptionstoUse) do
 			config.variablestoUse[i] = option:GetValue()
 		end
 	end
 	-- Print again
-	print("Config at end of updateConfig:", config)
+	--print("Config at end of updateConfig:", config)
 end
 
 -- Draw indicator text
 local function drawIndicator(text)
 	if config.enabled then
 		draw.SetFont(font)
-		draw.Color(config.indicatorColor)
+		draw.Color(unpack(config.indicatorColor))
 		draw.TextShadow(config.indicatorPos.x, config.indicatorPos.y, text)
 	end
 end
@@ -130,9 +132,9 @@ local function disableExtraESP()
 	gui.SetValue("esp.chams.enemy.occluded", 0)
 
 	-- Disable options enabled by enableExtraESP
-	for i = 1, #espoptionstoUse:GetItems() do
-		local option = espoptionstoUse:GetItems()[i]
-		if espoptionstoUse:GetValue(option) then
+	for i = 1, #espoptionstoUse[i] do
+		local option = espoptionstoUse[i]:GetValue()
+		if espoptionstoUse[i]:GetValue(option) then
 			gui.SetValue(option, false)
 		end
 	end
@@ -143,9 +145,9 @@ local function enableExtraESP()
 	gui.SetValue("esp.chams.enemy.occluded", 1)
 
 	-- Enable options selected in enabledEspOptions
-	for i = 1, #espoptionstoUse:GetItems() do
-		local option = espoptionstoUse:GetItems()[i]
-		if espoptionstoUse:GetValue(option) then
+	for i = 1, #espoptionstoUse[i] do
+		local option = espoptionstoUse[i]:GetValue()
+		if espoptionstoUse[i]:GetValue(option) then
 			gui.SetValue(option, true)
 		end
 	end
@@ -157,9 +159,9 @@ end
 
 -- Internal State
 local isESPActive = false
-local wasPlayerAlive = true
+local wasPlayerAlive = false
 local isToggled = false
-
+local isAlive = entities.GetLocalPlayer():IsAlive()
 -- Main logic
 local function onDraw()
 	-- Get player state
@@ -206,6 +208,9 @@ local function onDraw()
 			if isToggled then
 				OnHoldExtraESP()
 				isESPActive = true
+				if isESPActive then
+					drawIndicator("Enabled")
+				end
 			else
 				disableExtraESP()
 			end
@@ -213,7 +218,7 @@ local function onDraw()
 	end
 	-- Draw indicator if active
 	if isESPActive then
-		drawIndicator(keyMode == 1 and "Enabled" or "OnHold")
+		drawIndicator("Enabled")
 	end
 end
 
@@ -222,9 +227,9 @@ callbacks.Register("Draw", onDraw)
 -- Cleanup on unload
 callbacks.Register("Unload", function()
 	-- Close log file
-	if logFile then
+	--[[if logFile then
 		logFile:Close()
-	end
+	end]]
 	-- Clean up menu tabs
 	if menuTab then
 		menuTab:Remove()
@@ -236,4 +241,4 @@ callbacks.Register("Unload", function()
 end)
 
 --***********************************************--
-print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
+print("" .. GetScriptName() .. " loaded without Errors")
