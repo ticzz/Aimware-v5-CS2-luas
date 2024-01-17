@@ -1,5 +1,6 @@
-local name = "aimware.net Beta"
-local seperator = "|"
+local cheatname = "aimware.net Beta"
+local user_name = cheat.GetUserName()
+local seperator = " | "
 local fps = "fps"
 
 local count = 0
@@ -11,14 +12,15 @@ local get_abs_fps = function()
 	return math.floor((1.0 / frame_rate) + 0.5)
 end
 
+local watermarktext = cheatname .. seperator .. user_name
+
 local function draw_logo()
 	draw.Color(110, 110, 110, 255)
 	draw.FilledRect(5, 5, 245, 35)
 	draw.Color(255, 255, 255, 255)
 	draw.FilledRect(10, 10, 240, 30)
 	draw.Color(0, 0, 0, 255)
-	draw.Text(15, 15, name)
-	draw.Text(137, 14, seperator)
+	draw.Text(15, 15, watermarktext)
 
 	local fps = get_abs_fps()
 
@@ -30,8 +32,7 @@ local function draw_logo()
 		draw.Color(0, 150, 0, 255)
 	end
 
-	draw.Text(143, 15, tostring(get_abs_fps()))
-	draw.Text(165, 15, "  fps")
+	draw.Text(143, 15, watermarktext .. seperator .. "  fps" .. get_abs_fps())
 end
 
 callbacks.Register("Draw", draw_logo)
