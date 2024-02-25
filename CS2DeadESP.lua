@@ -19,7 +19,7 @@ local indicators_clr = gui.ColorPicker(espGroup, "indicator.color", "WH Indicato
 local xposi = gui.Slider(espGroup, "deadesp_xposi", "X Position", 15, 0, x)
 local yposi = gui.Slider(espGroup, "deadesp_yposi", "Y Position", y / 2, 0, y)
 
--- Option Tips
+-- Option Descriptions
 gui.Text(espGroup, "Created by ticzz | aka KriZz87")
 gui.Text(espGroup, "https://github.com/ticzz/Aimware-v5-CS2-luas")
 holdKey:SetDescription("Key to turn on Chams thru Wallz while alive")
