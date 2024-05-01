@@ -2,12 +2,13 @@
 -- Original was made for CS:GO by Verieth [https://aimware.net/forum/user/283534]
 -- *Updated/Fixed to make it work in CS2 by ticZz*
 
-local lua_ref = gui.Reference("Visuals", "World", "Extra")
-local lua_enable_damage_marker = gui.Checkbox(lua_ref, "damage_indicator_checkbox", "Enable Damage Indicators", true)
-local lua_defoult_color = gui.ColorPicker(lua_ref, "defoult_color", "Default Shot Color", 170, 166, 255, 255)
-local lua_lethal_color = gui.ColorPicker(lua_ref, "lethal_color", "Lethal Shot Color", 255, 40, 40, 255)
-local lua_damage_speed = gui.Slider(lua_ref, "damage_speed", "Animation Speed", 3, 1, 15)
-local lua_damage_time = gui.Slider(lua_ref, "damage_time", "Time of Visibility", 250, 50, 800, 10)
+local lua_ref = gui.Reference("Visuals", "World", "Camera")
+local lua_ref_group = gui.Groupbox(lua_ref, "Animated Damage Indicator")
+local lua_enable_damage_marker = gui.Checkbox(lua_ref_group, "damage_indicator_checkbox", "Enable Damage Indicators", true)
+local lua_defoult_color = gui.ColorPicker(lua_ref_group, "defoult_color", "Default Shot Color", 170, 166, 255, 255)
+local lua_lethal_color = gui.ColorPicker(lua_ref_group, "lethal_color", "Lethal Shot Color", 255, 40, 40, 255)
+local lua_damage_speed = gui.Slider(lua_ref_group, "damage_speed", "Animation Speed", 3, 1, 15)
+local lua_damage_time = gui.Slider(lua_ref_group, "damage_time", "Time of Visibility", 250, 50, 800, 10)
 local damage_font = draw.CreateFont("Verdana", 18, 1200)
 
 local particles = { {} }
