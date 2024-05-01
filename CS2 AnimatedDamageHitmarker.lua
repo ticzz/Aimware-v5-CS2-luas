@@ -7,7 +7,7 @@ local lua_ref_group = gui.Groupbox(lua_ref, "Animated Damage Indicator")
 local lua_enable_damage_marker = gui.Checkbox(lua_ref_group, "damage_indicator_checkbox", "Enable Damage Indicators", true)
 local lua_defoult_color = gui.ColorPicker(lua_ref_group, "defoult_color", "Default Shot Color", 170, 166, 255, 255)
 local lua_lethal_color = gui.ColorPicker(lua_ref_group, "lethal_color", "Lethal Shot Color", 255, 40, 40, 255)
-local lua_damage_speed = gui.Slider(lua_ref_group, "damage_speed", "Animation Speed", 3, 1, 15)
+local lua_damage_speed = gui.Slider(lua_ref_group, "damage_speed", "Animation Speed", 5, 1, 15)
 local lua_damage_time = gui.Slider(lua_ref_group, "damage_time", "Time of Visibility", 250, 50, 800, 10)
 local damage_font = draw.CreateFont("Verdana", 18, 1200)
 
