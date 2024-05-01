@@ -1,5 +1,7 @@
 -- Thanks to Gladiator and 2878713023 with help to fix some issues
--- Original [https://aimware.net/forum/thread/157762] was made by Verieth [https://aimware.net/forum/user/283534]
+-- Original [https://aimware.net/forum/thread/157762] was made for CS:GO by Verieth [https://aimware.net/forum/user/283534]
+
+-- Just a fixed Version of Verieth´s Animated Damage Indicator to work in CS2 by ticZz
 
 local lua_ref = gui.Reference("Visuals", "World", "Extra")
 local lua_enable_damage_marker = gui.Checkbox(lua_ref, "damage_indicator_checkbox", "Enable Damage Indicators", true)
