@@ -19,7 +19,7 @@ local indicators_clr = gui.ColorPicker(espGroup, "indicator.color", "WH Indicato
 local xposi = gui.Slider(espGroup, "deadesp_xposi", "X Position", 15, 0, x)
 local yposi = gui.Slider(espGroup, "deadesp_yposi", "Y Position", y / 2, 0, y)
 
--- Option Descriptions
+-- Option Tips
 gui.Text(espGroup, "Created by ticzz | aka KriZz87")
 gui.Text(espGroup, "https://github.com/ticzz/Aimware-v5-CS2-luas")
 holdKey:SetDescription("Key to turn on Chams thru Wallz while alive")
@@ -28,7 +28,7 @@ xposi:SetDescription("Sets position X  for the Indicator")
 yposi:SetDescription("Sets position Y for the Indicator")
 local color = draw.Color
 local text = draw.TextShadow
-local font = draw.CreateFont("Arial", 12, 100)
+local font = draw.CreateFont("Verdana", 13, 800)
 
 -- Internal state
 local isAlive = false
@@ -51,7 +51,6 @@ local function EnableExtraESP()
 	gui.SetValue("esp.overlay.enemy.flags.scoped", false)
 	gui.SetValue("esp.overlay.enemy.health.healthnum", true)
 	gui.SetValue("esp.overlay.enemy.health.healthbar", true)
-	gui.SetValue("esp.overlay.enemy.name", true)
 	gui.SetValue("esp.overlay.enemy.weapon", true)
 	gui.SetValue("esp.overlay.weapon.ammo", true)
 	gui.SetValue("esp.overlay.enemy.barrel", false)
@@ -75,7 +74,6 @@ local function DisableExtraESP()
 	gui.SetValue("esp.overlay.enemy.flags.scoped", false)
 	gui.SetValue("esp.overlay.enemy.health.healthnum", false)
 	gui.SetValue("esp.overlay.enemy.health.healthbar", false)
-	gui.SetValue("esp.overlay.enemy.name", false)
 	gui.SetValue("esp.overlay.enemy.weapon", false)
 	gui.SetValue("esp.overlay.weapon.ammo", false)
 	gui.SetValue("esp.overlay.enemy.barrel", false)
@@ -108,12 +106,17 @@ local function UpdateESPForState()
 				OnHoldExtraESP()
 				color(indicators_clr:GetValue())
 				text(xposi:GetValue(), yposi:GetValue(), "OnHold Chams")
+			else
+				DisableExtraESP()
 			end
 		elseif holdKey:GetValue() ~= 0 and keyMode:GetValue() == 1 then
 			if input.IsButtonPressed(holdKey:GetValue()) then
-				toggle = not toggle
-			end
-			if toggle then
+				if not toggle then
+					toggle = true
+				else
+					toggle = false
+				end
+			elseif toggle then
 				OnHoldExtraESP()
 				color(indicators_clr:GetValue())
 				text(xposi:GetValue(), yposi:GetValue(), "WH Chams On")
@@ -129,6 +132,9 @@ end
 
 -- Main loop
 local function OnDraw()
+	if not entities.GetLocalPlayer() then
+		return
+	end
 	-- Get current player state
 	isAlive = entities.GetLocalPlayer():IsAlive()
 
