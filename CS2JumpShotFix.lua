@@ -52,49 +52,22 @@ local function get_weapon_class(weapon_id)
 	return "shared"
 end
 
--- Open log file for error logging
-local logFile = file.Open(GetScriptName() .. "error.txt", "a")
-
 local function jump_scout_fix()
 	local local_player = entities.GetLocalPlayer()
 	if not local_player or not local_player:IsAlive() then
-		draw.Color(0, 0, 200, 255)
 		gui.SetValue("misc.strafe.enable", true)
-		draw.TextShadow(20, 20, "No local player found")
 		return
 	end
 
 	if local_player ~= nil then
 		local weapon_id = local_player:GetWeaponID()
 		local weapon_group = get_weapon_class(weapon_id)
-			if weapon_group == "scout" then
-				print("scout")
-				gui.SetValue("misc.strafe.enable", false)
-				draw.Color(0, 200, 0, 255)
-				draw.TextShadow(20, 20, "Scout jumpfix enabled")
-			else
-				print("no scout")
-				draw.Color(200, 0, 0, 255)
-				gui.SetValue("misc.strafe.enable", true)
-				draw.TextShadow(20, 20, "Scout jumpfix disabled (no scout)")
-			end
+		if weapon_group == "scout" then
+			gui.SetValue("misc.strafe.enable", false)
+		else
+			gui.SetValue("misc.strafe.enable", true)
 		end
 	end
-
-callbacks.Register("Draw", function()
-	local status, err = pcall(function()
-		jump_scout_fix() -- Insert the Functions name that should be pcall´d
-	end)
-
-	if not status then
-		logFile:Write(err .. "\n")
-	end
-end)
-
-callbacks.Register("Unload", function()
-	if logFile then
-		logFile:Close()
-	end
-end)
+end
 
 print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
