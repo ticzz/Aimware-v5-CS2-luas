@@ -1,84 +1,100 @@
-------------weapon_hegrenade  weapon_incgrenade  weapon_molotov
-
-local weaponIDs = {
-	pistol = { 2, 3, 4, 30, 32, 36, 61, 63 },
-	sniper = { 9 },
-	scout = { 40 },
-	hpistol = { 1 },
-	smg = { 17, 19, 23, 24, 26, 33, 34 },
-	rifle = { 7, 8, 10, 13, 16, 39, 61 },
-	shotgun = { 25, 27, 29, 35 },
-	asniper = { 38, 11 },
-	lmg = { 28, 14 },
-	knife = {
-		42,
-		505,
-		506,
-		507,
-		508,
-		509,
-		510,
-		511,
-		512,
-		513,
-		514,
-		515,
-		516,
-		517,
-		518,
-		519,
-		520,
-		521,
-		522,
-		523,
-		524,
-	},
-	zeus = { 31 },
-	nade = { 43, 44, 45, 46, 47, 48 },
-}
-
-local function get_current_weapon()
-	if not entities:GetLocalPlayer() or not entities:GetLocalPlayer():IsAlive() then
-		return
+local function get_weapon_class(weapon_id)
+	if weapon_id == 11 or weapon_id == 38 then
+		return "asniper"
+	elseif weapon_id == 1 or weapon_id == 64 then
+		return "hpistol"
+	elseif weapon_id == 14 or weapon_id == 28 then
+		return "lmg"
+	elseif
+		weapon_id == 2
+		or weapon_id == 3
+		or weapon_id == 4
+		or weapon_id == 30
+		or weapon_id == 32
+		or weapon_id == 36
+		or weapon_id == 61
+		or weapon_id == 63
+	then
+		return "pistol"
+	elseif
+		weapon_id == 7
+		or weapon_id == 8
+		or weapon_id == 10
+		or weapon_id == 13
+		or weapon_id == 16
+		or weapon_id == 39
+		or weapon_id == 60
+	then
+		return "rifle"
+	elseif weapon_id == 40 then
+		return "scout"
+	elseif
+		weapon_id == 17
+		or weapon_id == 19
+		or weapon_id == 23
+		or weapon_id == 24
+		or weapon_id == 26
+		or weapon_id == 33
+		or weapon_id == 34
+	then
+		return "smg"
+	elseif weapon_id == 25 or weapon_id == 27 or weapon_id == 29 or weapon_id == 35 then
+		return "shotgun"
+	elseif weapon_id == 9 then
+		return "sniper"
+	elseif weapon_id == 31 then
+		return "zeus"
+	elseif weapon_id == 37 then
+		return "SHIELD"
+	elseif weapon_id == 85 then
+		return "Bumpmine"
 	end
-
-	local localPlayer = entities:GetLocalPlayer()
-	local weaponID = localPlayer:GetWeaponID()
-
-	for weaponClass, ids in pairs(weaponIDs) do
-		for _, id in ipairs(ids) do
-			if id == weaponID then
-				return weaponClass
-			end
-		end
-	end
-
 	return "shared"
 end
 
+-- Open log file for error logging
+local logFile = file.Open(GetScriptName() .. "error.txt", "a")
 
 local function jump_scout_fix()
-	local lp = entities.GetLocalPlayer()
-	if lp and lp:IsAlive() then
-		local vel = math.sqrt(
-			lp:GetPropFloat("localdata", "m_vecVelocity[0]") ^ 2 + lp:GetPropFloat("localdata", "m_vecVelocity[1]") ^ 2)
-		local weaponid == get_current_weapon()
-		if not weaponid or weaponid ~= 40 then return end
-		if weaponid == 40 then
-			if vel > 25 then
-				gui.SetValue("misc.strafe.enable", true)
-			else
-				gui.SetValue("misc.strafe.enable", false)
-			end
-		else
-			gui.SetValue("misc.strafe.enable", true)
-		end
-	else
+	local local_player = entities.GetLocalPlayer()
+	if not local_player or not local_player:IsAlive() then
+		draw.Color(0, 0, 200, 255)
 		gui.SetValue("misc.strafe.enable", true)
+		draw.TextShadow(20, 20, "No local player found")
+		return
 	end
-end
-callbacks.Register("Draw", jump_scout_fix)
 
---***********************************************--
+	if local_player ~= nil then
+		local weapon_id = local_player:GetWeaponID()
+		local weapon_group = get_weapon_class(weapon_id)
+			if weapon_group == "scout" then
+				print("scout")
+				gui.SetValue("misc.strafe.enable", false)
+				draw.Color(0, 200, 0, 255)
+				draw.TextShadow(20, 20, "Scout jumpfix enabled")
+			else
+				print("no scout")
+				draw.Color(200, 0, 0, 255)
+				gui.SetValue("misc.strafe.enable", true)
+				draw.TextShadow(20, 20, "Scout jumpfix disabled (no scout)")
+			end
+		end
+	end
+
+callbacks.Register("Draw", function()
+	local status, err = pcall(function()
+		jump_scout_fix() -- Insert the Functions name that should be pcall´d
+	end)
+
+	if not status then
+		logFile:Write(err .. "\n")
+	end
+end)
+
+callbacks.Register("Unload", function()
+	if logFile then
+		logFile:Close()
+	end
+end)
 
 print("♥♥♥ " .. GetScriptName() .. " loaded without Errors ♥♥♥")
