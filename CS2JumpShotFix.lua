@@ -5,37 +5,19 @@ local function get_weapon_class(weapon_id)
 		return "hpistol"
 	elseif weapon_id == 14 or weapon_id == 28 then
 		return "lmg"
-	elseif
-		weapon_id == 2
-		or weapon_id == 3
-		or weapon_id == 4
-		or weapon_id == 30
-		or weapon_id == 32
-		or weapon_id == 36
-		or weapon_id == 61
-		or weapon_id == 63
+	elseif weapon_id == 2 or weapon_id == 3 or weapon_id == 4 or weapon_id == 30 or weapon_id == 32 or weapon_id == 36 or
+		weapon_id == 61 or
+		weapon_id == 63
 	then
 		return "pistol"
-	elseif
-		weapon_id == 7
-		or weapon_id == 8
-		or weapon_id == 10
-		or weapon_id == 13
-		or weapon_id == 16
-		or weapon_id == 39
-		or weapon_id == 60
+	elseif weapon_id == 7 or weapon_id == 8 or weapon_id == 10 or weapon_id == 13 or weapon_id == 16 or weapon_id == 39 or
+		weapon_id == 60
 	then
 		return "rifle"
 	elseif weapon_id == 40 then
 		return "scout"
-	elseif
-		weapon_id == 17
-		or weapon_id == 19
-		or weapon_id == 23
-		or weapon_id == 24
-		or weapon_id == 26
-		or weapon_id == 33
-		or weapon_id == 34
+	elseif weapon_id == 17 or weapon_id == 19 or weapon_id == 23 or weapon_id == 24 or weapon_id == 26 or weapon_id == 33 or
+		weapon_id == 34
 	then
 		return "smg"
 	elseif weapon_id == 25 or weapon_id == 27 or weapon_id == 29 or weapon_id == 35 then
