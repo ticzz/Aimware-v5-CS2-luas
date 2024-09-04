@@ -44,7 +44,9 @@ callbacks.Register("Draw", jump_scout_fix, function()
 	if not localspeed then
 		return
 	end
-	if weapon_group == "scout" then
+	if weapon_group ~= "scout" then
+		return
+	elseif weapon_group == "scout" then
 		if localspeed < 25 then
 			gui.SetValue("misc.strafe.enable", false)
 		else
