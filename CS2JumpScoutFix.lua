@@ -5,16 +5,38 @@ local function get_weapon_class(weapon_id)
 		return "hpistol"
 	elseif weapon_id == 14 or weapon_id == 28 then
 		return "lmg"
-	elseif weapon_id == 2 or weapon_id == 3 or weapon_id == 4 or weapon_id == 30 or weapon_id == 32 or weapon_id == 36 or
-		weapon_id == 61 or weapon_id == 63 then
+	elseif
+		weapon_id == 2
+		or weapon_id == 3
+		or weapon_id == 4
+		or weapon_id == 30
+		or weapon_id == 32
+		or weapon_id == 36
+		or weapon_id == 61
+		or weapon_id == 63
+	then
 		return "pistol"
-	elseif weapon_id == 7 or weapon_id == 8 or weapon_id == 10 or weapon_id == 13 or weapon_id == 16 or weapon_id == 39 or
-		weapon_id == 60 then
+	elseif
+		weapon_id == 7
+		or weapon_id == 8
+		or weapon_id == 10
+		or weapon_id == 13
+		or weapon_id == 16
+		or weapon_id == 39
+		or weapon_id == 60
+	then
 		return "rifle"
 	elseif weapon_id == 40 then
 		return "scout"
-	elseif weapon_id == 17 or weapon_id == 19 or weapon_id == 23 or weapon_id == 24 or weapon_id == 26 or weapon_id == 33 or
-		weapon_id == 34 then
+	elseif
+		weapon_id == 17
+		or weapon_id == 19
+		or weapon_id == 23
+		or weapon_id == 24
+		or weapon_id == 26
+		or weapon_id == 33
+		or weapon_id == 34
+	then
 		return "smg"
 	elseif weapon_id == 25 or weapon_id == 27 or weapon_id == 29 or weapon_id == 35 then
 		return "shotgun"
@@ -31,16 +53,21 @@ local function get_weapon_class(weapon_id)
 end
 
 callbacks.Register("Draw", jump_scout_fix, function()
-	local local_player = entities.GetLocalPlayer()
-	if not local_player or not local_player:IsAlive() then
+	local localPlayer = entities.GetLocalPlayer()
+	if not localPlayer or not localPlayer:IsAlive() then
 		gui.SetValue("misc.strafe.enable", true)
 		return
 	end
 
-	if local_player ~= nil then
-		local weapon_id = local_player:GetWeaponID()
-		local weapon_group = get_weapon_class(weapon_id)
-		if weapon_group == "scout" then
+	local weapon_id = localPlayer:GetWeaponID()
+	local weapon_group = get_weapon_class(weapon_id)
+	local velocity = localPlayer:GetPropVector("m_vecVelocity")
+	local localspeed = velocity:Length2D()
+	if not localspeed then
+		return
+	end
+	if weapon_group == "scout" then
+		if localspeed < 25 then
 			gui.SetValue("misc.strafe.enable", false)
 		else
 			gui.SetValue("misc.strafe.enable", true)
