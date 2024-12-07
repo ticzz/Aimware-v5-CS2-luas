@@ -12,7 +12,7 @@
 
  **providing a visual indicator of when Aimware is fully usable.**
 
-*
+##
 
 ### Usage: 
 #### Put the scripts in format filetype '.lua' in your Folder for Configs & Luas, path is like
