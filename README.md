@@ -8,7 +8,7 @@
 #### or just type %AppData% in WindowsSearch, 
 #### then open Roaming -> RANDOMLETTERSNAMEDFOLDER -> RANDOMLETTERSNAMEDFOLDER
 *
-* Replace YOURPCNAME, RANDOMLETTERSNAMEDFOLDER & RANDOMLETTERSNAMEDFOLDER
+* Replace YOURPCNAME, RANDOMLETTERSNAMEDFOLDER & RANDOMLETTERSNAMEDFOLDER with your details obviously
 *
 
 ### Note about autorun.lua: 
