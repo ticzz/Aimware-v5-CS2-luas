@@ -4,7 +4,7 @@
                                   
 ## ° **LUAscripts for Aimware in CS2** °
 
-#### Usage: 
+### Usage: 
 **Put the scripts in format filetype '.lua' in the folder containing your configs & luas, path is like**
 *`C:\Users\YOURPCNAME\AppData\Roaming\RANDOMLETTERSNAMEDFOLDER\RANDOMLETTERSNAMEDFOLDER`*
 **or just type %AppData% in WindowsSearch,**
@@ -12,7 +12,7 @@
 **Replace YOURPCNAME, RANDOMLETTERSNAMEDFOLDER & RANDOMLETTERSNAMEDFOLDER with your details obviously..**
 
 
-### Note about autorun.lua:
+#### Note about autorun.lua:
 ````````
 ‎Because Aimware injection can sometimes take some time,
 autorun.lua includes a simple script that runs immediately after the injection completes,
