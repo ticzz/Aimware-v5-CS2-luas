@@ -2,7 +2,7 @@
 # Aimware-v5.x-luas 
 
                                   
-° **LUAscripts for Aimware in CS2** °
+### ° **LUAscripts for Aimware in CS2** °
 
 
 # Note about autorun.lua: 
