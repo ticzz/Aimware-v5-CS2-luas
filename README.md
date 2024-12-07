@@ -6,7 +6,7 @@
 
 ### Usage: 
 **Put the scripts in format filetype '.lua' in the folder containing your configs & luas, path is like**
-**`C:\Users\YOURPCNAME\AppData\Roaming\RANDOMLETTERSNAMEDFOLDER\RANDOMLETTERSNAMEDFOLDER`**
+`C:\Users\YOURPCNAME\AppData\Roaming\RANDOMLETTERSNAMEDFOLDER\RANDOMLETTERSNAMEDFOLDER`
 **or just type %AppData% in WindowsSearch,**
 **then open Roaming -> RANDOMLETTERSNAMEDFOLDER -> RANDOMLETTERSNAMEDFOLDER**
 **Replace YOURPCNAME, RANDOMLETTERSNAMEDFOLDER & RANDOMLETTERSNAMEDFOLDER with your details obviously..**
