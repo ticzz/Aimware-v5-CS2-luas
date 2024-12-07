@@ -4,7 +4,7 @@
                                   
 ## ° **LUAscripts for Aimware in CS2** °
 
-## Note about autorun.lua: 
+### Note about autorun.lua: 
 ‎ 
 **Because Aimware injection can sometimes take some time,**
 
@@ -14,7 +14,7 @@
 
 *
 
-## Usage: 
+### Usage: 
 #### Put the scripts in format filetype '.lua' in your Folder for Configs & Luas, path is like
 #### C:\Users\YOURPCNAME\AppData\Roaming\RANDOMLETTERSNAMEDFOLDER\RANDOMLETTERSNAMEDFOLDER
 #### or just type %AppData% in WindowsSearch, 
