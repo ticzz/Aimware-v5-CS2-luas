@@ -4,8 +4,8 @@
                                   
 ### ° **LUAscripts for Aimware in CS2** °
 
-#
-#
+*
+*
 
 ### Note about autorun.lua: 
 ##### Because Aimware injection can sometimes take some time, 
